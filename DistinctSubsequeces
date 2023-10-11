@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+
+const int MOD = 1000000007;
+
+int distinctSubsequences(std::string s) {
+    int n = s.length();
+    std::vector<int> dp(n + 1, 0);
+    dp[0] = 1;
+
+    std::vector<int> lastOccurrence(26, -1);
+
+    for (int i = 1; i <= n; i++) {
+        dp[i] = (2 * dp[i - 1]) % MOD;
+        if (lastOccurrence[s[i - 1] - 'a'] != -1) {
+            dp[i] = (dp[i] - dp[lastOccurrence[s[i - 1] - 'a']] + MOD) % MOD;
+        }
+        lastOccurrence[s[i - 1] - 'a'] = i - 1;
+    }
+
+    return dp[n];
+}
+
+int main() {
+    std::string s1 = "gfg";
+    std::cout << "Example 1: " << distinctSubsequences(s1) << std::endl;
+
+    std::string s2 = "ggg";
+    std::cout << "Example 2: " << distinctSubsequences(s2) << std::endl;
+
+    return 0;
+}
